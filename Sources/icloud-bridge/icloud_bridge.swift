@@ -1,14 +1,14 @@
 @main
 public struct icloud_bridge {
-    public private(set) var text = "Hello, World!"
-
     public static func main() {
+        let method: () -> Void = {
+            print("handle function 1");
+        }
         
-        print(CommandLine.arguments)
-        print(CommandLine.argc)
+        let testCmd = Command(action: method);
+        
+        testCmd.action();
     }
 }
 
-private func cli_handler (args: Array<String>) -> String {
-    return "";
-}
+

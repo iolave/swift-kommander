@@ -15,36 +15,41 @@ public class Commander {
         self.commands = [:];
     }
     
-    func addCommand(name: String, cmd: Command) {
-        self.commands[name] = cmd;
+    func addCommand(cmd: Command) {
+        self.commands[cmd.name] = cmd;
     }
 }
 
 public class Command {
+    let name: String;
     let action: CommandAction;
     let helpAction: CommandAction?;
     let options: [Option]?;
     // TODO: add subcommands support
     
-    init(action: @escaping CommandAction) {
+    init(name: String, action: @escaping CommandAction) {
+        self.name = name;
         self.action = action;
         self.helpAction = nil;
         self.options = nil;
     }
     
-    init(action: @escaping CommandAction, helpAction: @escaping CommandAction) {
+    init(name: String, action: @escaping CommandAction, helpAction: @escaping CommandAction) {
+        self.name = name;
         self.action = action;
         self.helpAction = helpAction;
         self.options = nil;
     }
     
-    init(action: @escaping CommandAction, options: [Option]) {
+    init(name:String, action: @escaping CommandAction, options: [Option]) {
+        self.name = name;
         self.action = action;
         self.helpAction = nil;
         self.options = options;
     }
     
-    init(action: @escaping CommandAction, helpAction: @escaping CommandAction, options: [Option]) {
+    init(name:String, action: @escaping CommandAction, helpAction: @escaping CommandAction, options: [Option]) {
+        self.name = name;
         self.action = action;
         self.helpAction = helpAction;
         self.options = options;

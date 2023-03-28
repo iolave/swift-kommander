@@ -4,9 +4,9 @@ public struct icloud_bridge {
         // TODO: add commander config folder?
         let commander: Commander = Commander();
         
-        commander.addCommand(name: "testCmd", cmd: testCommand);
+        commander.addCommand(cmd: testCommand);
         
-        commander.commands["testCmd"]?.action();
-        print(commander.commands["testCmd"]?.options?[0].name)
+        commander.commands["test"]?.action();
+        print(commander.commands["test"]?.options?[0].name)
     }
 }

@@ -7,6 +7,19 @@
 
 import Foundation
 
+// TODO: change name
+class Commander {
+    var commands: [String: Command];
+    
+    init(){
+        self.commands = [:];
+    }
+    
+    func addCommand(name: String, cmd: Command) {
+        self.commands[name] = cmd;
+    }
+}
+
 class Command {
     let action: CommandAction;
     

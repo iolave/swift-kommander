@@ -5,9 +5,12 @@ public struct icloud_bridge {
             print("handle function 1");
         }
         
-        let testCmd = Command(action: method);
+        let testCmd: Command = Command(action: method);
         
-        testCmd.action();
+        let commander: Commander = Commander();
+        commander.addCommand(name: "testCmd", cmd: testCmd)
+        
+        commander.commands["testCmd"]?.action();
     }
 }
 

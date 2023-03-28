@@ -1,17 +1,19 @@
 @main
 public struct icloud_bridge {
     public static func main() {
-        let method: () -> Void = {
-            print("handle function 1");
-        }
+        var options: [Option];
+        var method: CommandAction;
+        var cmd: Command;
         
-        let testCmd: Command = Command(action: method);
+        method = { print("handle function 1") }
+        options = [ Option(name: "--test", requiresValue: true, required: true) ];
+        cmd = Command(action: method, options: options);
         
         let commander: Commander = Commander();
-        commander.addCommand(name: "testCmd", cmd: testCmd)
+        
+        commander.addCommand(name: "testCmd", cmd: cmd);
         
         commander.commands["testCmd"]?.action();
+        print(commander.commands["testCmd"]?.options?[0].name)
     }
 }
-
-

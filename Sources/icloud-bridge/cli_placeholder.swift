@@ -24,6 +24,7 @@ class Command {
     let action: CommandAction;
     let helpAction: CommandAction?;
     let options: [Option]?;
+    // TODO: add subcommands support
     
     init(action: @escaping CommandAction) {
         self.action = action;
@@ -67,6 +68,7 @@ struct Option {
     }
 }
 
+// TODO: add support for custom functions using, maybe, typed parameters(?)
 typealias CommandAction = () -> Void;
 
 

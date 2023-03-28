@@ -6,7 +6,9 @@ public struct icloud_bridge {
         
         commander.addCommand(cmd: testCommand);
         
-        commander.commands["test"]?.action();
-        print(commander.commands["test"]?.options?[0].name)
+        // commander.commands["test"]?.action();
+        // print(commander.commands["test"]?.options?[0].name)
+        
+        commander.parse(args: ["test"]);
     }
 }

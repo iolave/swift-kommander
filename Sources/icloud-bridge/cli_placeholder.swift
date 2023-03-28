@@ -9,14 +9,19 @@ import Foundation
 
 // TODO: change name
 public class Commander {
-    var commands: [String: Command];
+    private var commands: [String: Command];
     
     init(){
         self.commands = [:];
     }
     
-    func addCommand(cmd: Command) {
+    public func addCommand(cmd: Command) {
         self.commands[cmd.name] = cmd;
+    }
+    
+    // TODO: add logic
+    public func parse(args: [String]) -> Void {
+        print("WIP");
     }
 }
 

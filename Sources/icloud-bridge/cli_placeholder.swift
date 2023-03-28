@@ -8,7 +8,7 @@
 import Foundation
 
 // TODO: change name
-class Commander {
+public class Commander {
     var commands: [String: Command];
     
     init(){
@@ -20,7 +20,7 @@ class Commander {
     }
 }
 
-class Command {
+public class Command {
     let action: CommandAction;
     let helpAction: CommandAction?;
     let options: [Option]?;
@@ -52,7 +52,7 @@ class Command {
 }
 
 
-struct Option {
+public struct Option {
     let name: String;
     let requiresValue: Bool;
     let required: Bool;
@@ -69,6 +69,6 @@ struct Option {
 }
 
 // TODO: add support for custom functions using, maybe, typed parameters(?)
-typealias CommandAction = () -> Void;
+public typealias CommandAction = () -> Void;
 
 

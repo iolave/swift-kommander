@@ -8,7 +8,7 @@
 import Foundation
 
 // TODO: change name
-public class Commander {
+public class CliParser {
     private var commands: [String: Command];
     
     init(){

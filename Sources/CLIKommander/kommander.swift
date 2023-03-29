@@ -1,15 +1,7 @@
-//
-//  cli_placeholder.swift
-//  
-//
-//  Created by Ignacio Olave on 27-03-23.
-//
-
 import Foundation
 
-// TODO: change name
-public class CliParser {
-    private var commands: [String: Command] = [:];
+public class Kommander {
+    public var commands: [String: Command] = [:];
     
     init(){ }
     
@@ -20,6 +12,7 @@ public class CliParser {
     }
     
     public func addCommand(cmd: Command) {
+        // TODO: add error handling for duplicated command name
         self.commands[cmd.name] = cmd;
     }
     
@@ -86,3 +79,18 @@ public struct Option {
 public typealias CommandAction = () -> Void;
 
 
+
+
+// public struct kommander {
+//     public static func main() {
+//         // TODO: add commander config folder?
+//         let cliParser = CliParser();
+//
+//         cliParser.addCommand(cmd: testCommand);
+//
+//         // commander.commands["test"]?.action();
+//         // print(commander.commands["test"]?.options?[0].name)
+//
+//         cliParser.parse(args: ["test"]);
+//     }
+// }

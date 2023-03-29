@@ -9,10 +9,14 @@ import Foundation
 
 // TODO: change name
 public class CliParser {
-    private var commands: [String: Command];
+    private var commands: [String: Command] = [:];
     
-    init(){
-        self.commands = [:];
+    init(){ }
+    
+    init(commands: [Command]){
+        for cmd in commands {
+            self.commands[cmd.name] = cmd;
+        }
     }
     
     public func addCommand(cmd: Command) {

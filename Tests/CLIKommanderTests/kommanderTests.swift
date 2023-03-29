@@ -33,24 +33,4 @@ final class KommanderTests: XCTestCase {
         XCTAssert(false)
     }
     
-    
-    
-    //func testExample() throws {
-        //let commandName = "test";
-//
-        //let options: [Option] = [
-        //    Option(name: "--first", requiresValue: true, required: true),
-        //    Option(name: "--second", requiresValue: true, required: true),
-        //    Option(name: "--third", requiresValue: true, required: true),
-        //];
-//
-        //let method: CommandAction = {
-        //    print("handle function 1")
-        //};
-//
-        //let testCommand: Command = Command(name: commandName, action: method, helpAction: //method, options: options);
-        //
-        //let kommander = Kommander(commands: [testCommand]);
-        //kommander.parse(args: ["test"]);
-    //}
 }

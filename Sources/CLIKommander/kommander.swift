@@ -25,7 +25,7 @@ public class Kommander {
 public class Command {
     let name: String;
     var action: CommandAction? = nil;
-    var helpAction: CommandAction? = nil;
+    var usage: CommandAction? = nil;
     var options: [Option]? = nil;
     var subCommands: [String: Command] = [:];
 
@@ -36,10 +36,10 @@ public class Command {
     }
 
     // Simple command with an action and a custom usage method
-    init(name: String, action: @escaping CommandAction, helpAction: @escaping CommandAction) {
+    init(name: String, action: @escaping CommandAction, usage: @escaping CommandAction) {
         self.name = name;
         self.action = action;
-        self.helpAction = helpAction;
+        self.usage = usage;
     }
 
     // Command with options
@@ -50,10 +50,10 @@ public class Command {
     }
 
     // Command with options and a custom usage method
-    init(name:String, action: @escaping CommandAction, options: [Option], helpAction: @escaping CommandAction) {
+    init(name:String, action: @escaping CommandAction, options: [Option], usage: @escaping CommandAction) {
         self.name = name;
         self.action = action;
-        self.helpAction = helpAction;
+        self.usage = usage;
         self.options = options;
     }
 
@@ -66,9 +66,9 @@ public class Command {
     }
     
     // Command with subcommands and a custom usage method
-    init(name: String, subCommands: [Command], helpAction: @escaping CommandAction) {
+    init(name: String, subCommands: [Command], usage: @escaping CommandAction) {
         self.name = name;
-        self.helpAction = helpAction;
+        self.usage = usage;
         for cmd in subCommands {
             self.subCommands[cmd.name] = cmd;
         }

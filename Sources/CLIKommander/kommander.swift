@@ -24,37 +24,54 @@ public class Kommander {
 
 public class Command {
     let name: String;
-    let action: CommandAction;
-    let helpAction: CommandAction?;
-    let options: [Option]?;
-    // TODO: add subcommands support
-    
+    var action: CommandAction? = nil;
+    var helpAction: CommandAction? = nil;
+    var options: [Option]? = nil;
+    var subCommands: [String: Command] = [:];
+
+    // Simple command with an action
     init(name: String, action: @escaping CommandAction) {
         self.name = name;
         self.action = action;
-        self.helpAction = nil;
-        self.options = nil;
     }
-    
+
+    // Simple command with an action and a custom usage method
     init(name: String, action: @escaping CommandAction, helpAction: @escaping CommandAction) {
         self.name = name;
         self.action = action;
         self.helpAction = helpAction;
-        self.options = nil;
     }
-    
+
+    // Command with options
     init(name:String, action: @escaping CommandAction, options: [Option]) {
         self.name = name;
         self.action = action;
-        self.helpAction = nil;
         self.options = options;
     }
-    
-    init(name:String, action: @escaping CommandAction, helpAction: @escaping CommandAction, options: [Option]) {
+
+    // Command with options and a custom usage method
+    init(name:String, action: @escaping CommandAction, options: [Option], helpAction: @escaping CommandAction) {
         self.name = name;
         self.action = action;
         self.helpAction = helpAction;
         self.options = options;
+    }
+
+    // Command with subcommands and a custom usage method
+    init(name: String, subCommands: [Command]) {
+        self.name = name;
+        for cmd in subCommands {
+            self.subCommands[cmd.name] = cmd;
+        }
+    }
+    
+    // Command with subcommands and a custom usage method
+    init(name: String, subCommands: [Command], helpAction: @escaping CommandAction) {
+        self.name = name;
+        self.helpAction = helpAction;
+        for cmd in subCommands {
+            self.subCommands[cmd.name] = cmd;
+        }
     }
 }
 

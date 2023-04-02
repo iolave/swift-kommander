@@ -30,7 +30,10 @@ final class KommanderTests: XCTestCase {
     }
     
     func testMethodParse() {
-        XCTAssert(false)
+        CommandLine.arguments.append("test")
+        let kommander: Kommander = Kommander();
+        kommander.parse();
+        //XCTAssert(false)
     }
     
 }

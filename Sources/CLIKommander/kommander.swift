@@ -6,7 +6,7 @@ public class Kommander {
     init(){ }
     
     init(commands: [Command]){
-        for cmd in commands {
+        for cmd: Command in commands {
             self.commands[cmd.name] = cmd;
         }
     }
@@ -17,11 +17,21 @@ public class Kommander {
     }
     
     // TODO: add logic
-    public func parse(args: [String]) -> Void {
+    public func parse() -> Void {
+        let args: ArraySlice<String> = CommandLine.arguments[2...];
+
+        for arg: String in args {
+            if (self.commands[arg] == nil) {
+                print("argument: ", arg, "is not valid");
+                exit(1);
+            }
+        }
+
         print("WIP");
     }
 }
 
+// TODO: test command
 public class Command {
     let name: String;
     var action: CommandAction? = nil;
@@ -75,7 +85,7 @@ public class Command {
     }
 }
 
-
+// TODO: test option
 public struct Option {
     let name: String;
     let requiresValue: Bool;

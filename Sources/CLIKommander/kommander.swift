@@ -2,7 +2,10 @@ import Foundation
 
 public class Kommander {
     public var commands: [String: Command] = [:];
-    
+    public var defaultAction: CommandAction? = nil;
+    // add default usage
+    public var usage: CommandAction? = nil;
+
     init(){ }
     
     init(commands: [Command]){
@@ -10,7 +13,24 @@ public class Kommander {
             self.commands[cmd.name] = cmd;
         }
     }
+
+    init(commands: [Command], usage: @escaping CommandAction){
+        for cmd: Command in commands {
+            self.commands[cmd.name] = cmd;
+        }
+
+        self.usage = usage;
+    }
+
+    init(action: @escaping CommandAction){
+        self.defaultAction = action;
+    }
     
+    init(action: @escaping CommandAction, usage: @escaping CommandAction){
+        self.defaultAction = action;
+        self.defaultAction = action;
+    }
+
     public func addCommand(cmd: Command) {
         // TODO: add error handling for duplicated command name
         self.commands[cmd.name] = cmd;
@@ -19,10 +39,30 @@ public class Kommander {
     // TODO: add logic
     public func parse() -> Void {
         let args: ArraySlice<String> = CommandLine.arguments[2...];
+        
+        if (self.commands.count == 0) {
+            if (args.count != 0) {
+                print("print usage");
+                exit(1);
+            }
+
+            if (self.defaultAction != nil) {
+                print("ran default action")
+                defaultAction?();
+            }
+
+            if (self.usage != nil) {
+                print("ran usage")
+                usage?();
+            }
+
+            print("no default action, neither usage")
+            return;
+        }
 
         for arg: String in args {
             if (self.commands[arg] == nil) {
-                print("argument: ", arg, "is not valid");
+                print("argument:", arg, "is not valid");
                 exit(1);
             }
         }

@@ -2,7 +2,7 @@ import Foundation;
 
 public class CLICommandBase {
     let name: String;
-    var action: CLIAction? = nil;
+    var action: CLIAction;
     var options: [CLIOption]? = nil;
 
     init(name: String, action: @escaping CommandAction) {

@@ -1,8 +1,12 @@
 import Foundation;
 
+enum CLICommandBaseError: Error {
+    case initWithEmptyOptions
+}
+
 public class CLICommandBase {
     let name: String;
-    var action: CLIAction;
+    var action: CLIAction? = nil;
     var options: [CLIOption]? = nil;
 
     init(name: String, action: @escaping CommandAction) {
@@ -10,9 +14,15 @@ public class CLICommandBase {
         self.action = action;
     }
 
-    init(name:String, action: @escaping CommandAction, options: [CLIOption]) {
+    init(name: String, action: @escaping CommandAction, options: [CLIOption]) throws {
         self.name = name;
         self.action = action;
+
+        if (options.count == 0) {
+            print("options initializer parameter can not be empty, either remove options parameter or add options");
+            throw CLICommandBaseError.initWithEmptyOptions
+        }
+
         self.options = options;
     }
 }

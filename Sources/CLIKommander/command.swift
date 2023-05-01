@@ -27,15 +27,19 @@ public class CLICommandBase {
     }
 }
 
+enum CLIOptionError: Error {
+    case invalidNamePrefix
+}
+
 public struct CLIOption {
     let name: String;
     let requiresValue: Bool;
     let required: Bool;
     
-    init(name: String, requiresValue: Bool, required: Bool) {
+    init(name: String, requiresValue: Bool, required: Bool) throws {
         if (!name.hasPrefix("--")) {
             print("CLIOptions 'name' property is required to have a '--' prefix");
-            exit(1);
+            throw CLIOptionError.invalidNamePrefix;
         }
 
         self.name = name;

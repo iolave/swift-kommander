@@ -20,3 +20,22 @@ final class CLICommandBaseTests: XCTestCase {
     }   
 
 }
+
+final class CLIOptionTests: XCTestCase {
+
+    func testInit_ThrowInvalidNamePrefixError() {
+        let name: String = "test-opt";
+
+        do {
+            try CLIOption(name: name, requiresValue: true, required: true);
+        } catch CLIOptionError.invalidNamePrefix {
+            return;
+        } catch {
+            XCTFail("Wrong error thrown");
+            return;
+        }
+            
+        XCTFail("No error thown");
+    }   
+
+}

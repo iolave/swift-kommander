@@ -2,6 +2,7 @@ import Foundation;
 
 enum CLICommandBaseError: Error {
     case initWithEmptyOptions
+    case duplicatedOptions
 }
 
 public class CLICommandBase {
@@ -20,7 +21,15 @@ public class CLICommandBase {
 
         if (options.count == 0) {
             print("options initializer parameter can not be empty, either remove options parameter or add options");
-            throw CLICommandBaseError.initWithEmptyOptions
+            throw CLICommandBaseError.initWithEmptyOptions;
+        }
+
+        // As options lenght is not 0 we're able to check 
+        // if is there another option with the same name
+        // or the same shorthand
+        if (optionDuplicates(options: options)) {
+            print("There is an option within the options initializer parameter that have a duplicated 'name' or 'shorthand' property");
+            throw CLICommandBaseError.duplicatedOptions;
         }
 
         self.options = options;
@@ -69,3 +78,27 @@ public struct CLIOption {
 }
 
 public typealias CLIAction = () -> Void;
+
+/**
+ * Check if a CLIOptions array have a duplicated
+ * `name` and/or `shorthand` property.
+ * - Parameters:
+ * - Returns:
+ * `true` when a duplicate is found and `false` otherwise.
+ */
+private func optionDuplicates(options: [CLIOption]) -> Bool {
+    var mutableOptions: [CLIOption] = options;
+
+    while(mutableOptions.count > 0) {
+        let opt: CLIOption? = mutableOptions.popLast();
+
+        if (opt == nil) { return true }
+
+        for optToCheck: CLIOption in mutableOptions {
+            if (optToCheck.name == opt!.name) { return true }
+            if (optToCheck.shorthand == opt!.shorthand) { return true }
+        }
+    }
+
+    return false;
+}

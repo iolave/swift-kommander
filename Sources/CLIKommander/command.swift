@@ -29,10 +29,12 @@ public class CLICommandBase {
 
 enum CLIOptionError: Error {
     case invalidNamePrefix
+    case invalidShorthandPrefix
 }
 
 public struct CLIOption {
     let name: String;
+    let shorthand: String?;
     let requiresValue: Bool;
     let required: Bool;
     
@@ -45,6 +47,24 @@ public struct CLIOption {
         self.name = name;
         self.requiresValue = requiresValue;
         self.required = required;
+        self.shorthand = nil;
+    }
+
+    init(name: String, shorthand: String ,requiresValue: Bool, required: Bool) throws {
+        if (!name.hasPrefix("--")) {
+            print("CLIOptions 'name' property is required to have a '--' prefix");
+            throw CLIOptionError.invalidNamePrefix;
+        }
+
+        if(!shorthand.hasPrefix("-")) {
+            print("CLIOptions 'shorthand' property is required to have a '-' prefix");
+            throw CLIOptionError.invalidShorthandPrefix;
+        }
+
+        self.name = name;
+        self.requiresValue = requiresValue;
+        self.required = required;
+        self.shorthand = shorthand;
     }
 }
 

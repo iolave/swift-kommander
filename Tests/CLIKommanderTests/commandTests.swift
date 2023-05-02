@@ -36,6 +36,29 @@ final class CLIOptionTests: XCTestCase {
         }
             
         XCTFail("No error thown");
+    }
+
+    func testInit_ThrowInvalidShorthandPrefixError() {
+        let name: String = "--test-opt";
+        let shorthand: String = "test";
+
+        do {
+            _ = try CLIOption(name: name, shorthand: shorthand, requiresValue: true, required: true);
+        } catch CLIOptionError.invalidShorthandPrefix {
+            return;
+        } catch {
+            XCTFail("Wrong error thrown");
+            return;
+        }
+            
+        XCTFail("No error thown");
+    }
+
+    func testInit_DontThrowError() {
+        let name: String = "--test-opt";
+        let shorthand: String = "-t";
+
+        XCTAssertNoThrow(try CLIOption(name: name, shorthand: shorthand, requiresValue: true, required: true))
     }   
 
 }

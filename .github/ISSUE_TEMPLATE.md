@@ -1,12 +1,11 @@
 ## Summary
+...
 
-## Expected behavior (optional)
+## Expected behavior
+...
 
+## Actual behavior
+...
 
-## Actual behavior (optional)
-
-
-## Steps to reproduce the behavior (optional)
-
-
-## Proposed solution (optional)
+## Proposed solution
+...

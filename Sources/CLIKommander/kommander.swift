@@ -3,10 +3,7 @@ import Foundation
 public class Kommander {
     public var commands: [String: Command] = [:];
     public var defaultAction: CommandAction? = nil;
-    // add default usage
     public var usage: CommandAction? = nil;
-
-    init(){ }
     
     init(commands: [Command]){
         for cmd: Command in commands {
@@ -32,9 +29,25 @@ public class Kommander {
     }
 
     public func addCommand(cmd: Command) {
-        // TODO: add error handling for duplicated command name
         self.commands[cmd.name] = cmd;
     }
+    
+    public func defaultUsage() -> Void {
+        if (self.commands.count == 0) {
+            if (self.defaultAction == nil) {
+                print("KOMMANDER_DEFAULTUSAGE_METHOD: no default command defined, exiting with code 1");
+                exit(1);
+            }
+            
+            print("Usage:")
+                
+            print("AppName [OPTIONS]")
+            print("")
+            print("[OPTIONS]")
+            // TODO: break command into a basic one and a extended one to allow options in the default command
+        }
+    }
+    
     
     // TODO: add logic
     public func parse() -> Void {
@@ -42,21 +55,23 @@ public class Kommander {
         
         if (self.commands.count == 0) {
             if (args.count != 0) {
-                print("print usage");
+                if (self.usage == nil) {
+                    print("KOMMANDER_PARSE_METHOD: no commands defined but arguments were given, printing custom usage");
+                    usage?();
+                }
+                
+                print("KOMMANDER_PARSE_METHOD: no commands defined but arguments were given, printing default usage");
+                defaultUsage();
+            }
+            
+            if (self.defaultAction == nil) {
+                print("KOMMANDER_PARSE_METHOD: no commands defined and no arguments were given and no default command defined, exiting with code 1");
                 exit(1);
             }
+            
+            print("KOMMANDER_PARSE_METHOD: no commands defined and no arguments were given, running default command");
+            defaultAction?();
 
-            if (self.defaultAction != nil) {
-                print("ran default action")
-                defaultAction?();
-            }
-
-            if (self.usage != nil) {
-                print("ran usage")
-                usage?();
-            }
-
-            print("no default action, neither usage")
             return;
         }
 
@@ -69,6 +84,10 @@ public class Kommander {
 
         print("WIP");
     }
+}
+
+private func defaultUsage(kommanderInstance: Kommander) -> Void {
+    
 }
 
 // TODO: test command

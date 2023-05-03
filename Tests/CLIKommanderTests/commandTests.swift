@@ -3,12 +3,12 @@ import XCTest
 
 final class CLICommandBaseTests: XCTestCase {
 
-    func testInit_ThrowEmptyOptionsError() {
+    func test_init_error_throw_initWithEmptyOptions() {
         let name: String = "test-cmd";
         let action: CommandAction = {};
 
         do {
-            try CLICommandBase(name: name, action: action, options: []);
+            _ = try CLICommandBase(name: name, action: action, options: []);
         } catch CLICommandBaseError.initWithEmptyOptions {
             return;
         } catch {
@@ -19,7 +19,7 @@ final class CLICommandBaseTests: XCTestCase {
         XCTFail("No error thown");
     }
 
-    func testInit_ThrowDuplicatedOptionsError_name() {
+    func test_init_error_throw_duplicatedOptions_name() {
         let name: String = "test-cmd";
         let action: CommandAction = {};
 
@@ -30,7 +30,7 @@ final class CLICommandBaseTests: XCTestCase {
         ]
 
         do {
-            try CLICommandBase(name: name, action: action, options: options);
+            _ = try CLICommandBase(name: name, action: action, options: options);
         } catch CLICommandBaseError.duplicatedOptions {
             return;
         } catch {
@@ -41,7 +41,7 @@ final class CLICommandBaseTests: XCTestCase {
         XCTFail("No error thown");
     }
 
-    func testInit_ThrowDuplicatedOptionsError_shorthand() {
+    func test_init_error_throw_duplicatedOptions_shorthand() {
         let name: String = "test-cmd";
         let action: CommandAction = {};
 
@@ -52,7 +52,7 @@ final class CLICommandBaseTests: XCTestCase {
         ]
 
         do {
-            try CLICommandBase(name: name, action: action, options: options);
+            _ = try CLICommandBase(name: name, action: action, options: options);
         } catch CLICommandBaseError.duplicatedOptions {
             return;
         } catch {
@@ -63,7 +63,7 @@ final class CLICommandBaseTests: XCTestCase {
         XCTFail("No error thown");
     }
 
-    func testInit_DontThrowError() {
+    func test_init_success() {
         let name: String = "test-cmd";
         let action: CommandAction = {};
 
@@ -156,11 +156,11 @@ final class CLICommandBaseTests: XCTestCase {
 
 final class CLIOptionTests: XCTestCase {
 
-    func testInit_ThrowInvalidNamePrefixError() {
+    func test_init_error_throw_invalidNamePrefix() {
         let name: String = "test-opt";
 
         do {
-            try CLIOption(name: name, requiresValue: true, required: true);
+            _ = try CLIOption(name: name, requiresValue: true, required: true);
         } catch CLIOptionError.invalidNamePrefix {
             return;
         } catch {
@@ -171,7 +171,7 @@ final class CLIOptionTests: XCTestCase {
         XCTFail("No error thown");
     }
 
-    func testInit_ThrowInvalidShorthandPrefixError() {
+    func test_init_error_throw_invalidShorthandPrefix() {
         let name: String = "--test-opt";
         let shorthand: String = "test";
 
@@ -187,7 +187,7 @@ final class CLIOptionTests: XCTestCase {
         XCTFail("No error thown");
     }
 
-    func testInit_DontThrowError() {
+    func test_init_success() {
         let name: String = "--test-opt";
         let shorthand: String = "-t";
 

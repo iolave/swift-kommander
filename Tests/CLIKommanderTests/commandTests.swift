@@ -74,6 +74,84 @@ final class CLICommandBaseTests: XCTestCase {
 
         XCTAssertNoThrow(try CLICommandBase(name: name, action: action, options: options))
     }
+
+    func test_addOption_error_throw_duplicatedOptions_name() {
+        let name: String = "test-cmd";
+        let action: CommandAction = {};
+
+        let cmd: CLICommandBase = CLICommandBase(name: name, action: action);
+
+        do {
+            try cmd.addOption(name: "--test-option", shorthand: nil, requiresValue: true, required: true);
+            try cmd.addOption(name: "--test-option", shorthand: nil, requiresValue: true, required: true);
+        } catch CLICommandBaseError.duplicatedOptions { return }
+        catch {
+            XCTFail("Wrong error thrown");
+            return;
+        }
+            
+        XCTFail("No error thown");
+    }
+    
+    func test_addOption_error_throw_duplicatedOptions_shorthand() {
+        let name: String = "test-cmd";
+        let action: CommandAction = {};
+
+        let cmd: CLICommandBase = CLICommandBase(name: name, action: action);
+
+        do {
+            try cmd.addOption(name: "--test-option-a", shorthand: "-t", requiresValue: true, required: true);
+            try cmd.addOption(name: "--test-option-b", shorthand: "-t", requiresValue: true, required: true);
+        } catch CLICommandBaseError.duplicatedOptions { return }
+        catch {
+            XCTFail("Wrong error thrown");
+            return;
+        }
+            
+        XCTFail("No error thown");
+    }
+
+    func test_addOption_error_throw_invalidNamePrefix() {
+        let name: String = "test-cmd";
+        let action: CommandAction = {};
+
+        let cmd: CLICommandBase = CLICommandBase(name: name, action: action);
+
+        do {
+            try cmd.addOption(name: "test-option", shorthand: nil, requiresValue: true, required: true);
+        } catch CLIOptionError.invalidNamePrefix { return }
+        catch {
+            XCTFail("Wrong error thrown");
+            return;
+        }
+            
+        XCTFail("No error thown");
+    }
+
+    func test_addOption_error_throw_invalidShorthandPrefix() {
+        let name: String = "test-cmd";
+        let action: CommandAction = {};
+
+        let cmd: CLICommandBase = CLICommandBase(name: name, action: action);
+
+        do {
+            try cmd.addOption(name: "--test-option", shorthand: "t", requiresValue: true, required: true);
+        } catch CLIOptionError.invalidShorthandPrefix { return }
+        catch {
+            XCTFail("Wrong error thrown");
+            return;
+        }
+            
+        XCTFail("No error thown");
+    }
+
+    func test_addOption_success() {
+        let name: String = "test-cmd";
+        let action: CommandAction = {};
+
+        let cmd: CLICommandBase = CLICommandBase(name: name, action: action);
+        XCTAssertNoThrow(try cmd.addOption(name: "--test-option", shorthand: "-t", requiresValue: false, required: false));
+    }
 }
 
 final class CLIOptionTests: XCTestCase {

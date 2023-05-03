@@ -34,6 +34,35 @@ public class CLICommandBase {
 
         self.options = options;
     }
+
+    /**
+    Adds an option to a CLICommandBase instance.
+    - Parameter name: Name of the given option (should begin with a `--` prefix)
+    - Parameter shorthand: Shorthand for the option name (optional, should begin with a `-` prefix)
+    - Parameter requiresValue: Specify if the option requires a value (i.e. `--path /root` or `--path=/root`)
+    - Parameter required: Specify if the option is required or optional.
+    - Throws `CLICommandBaseError.duplicatedOptions`
+    */
+    public func addOption(name: String, shorthand: String?, requiresValue: Bool, required: Bool) throws -> Void {
+        var option: CLIOption;
+
+        if (self.options == nil) { self.options = [] }
+
+        if (shorthand == nil) {
+            option = try CLIOption(name: name, requiresValue: requiresValue, required: required);
+        } else {
+            option = try CLIOption(name: name, shorthand: shorthand!, requiresValue: requiresValue, required: required);
+        }
+
+        self.options!.append(option);
+
+        if (optionDuplicates(options: self.options!)) {
+            print("There is an option within the options initializer parameter that have a duplicated 'name' or 'shorthand' property");
+            throw CLICommandBaseError.duplicatedOptions;
+        }
+        return;
+    }
+    
 }
 
 enum CLIOptionError: Error {

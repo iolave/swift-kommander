@@ -1,6 +1,10 @@
 import XCTest
 @testable import CLIKommander
 
+final class CLICommandTests: XCTestCase {
+    
+}
+
 final class CLICommandBaseTests: XCTestCase {
 
     func test_init_error_throw_initWithEmptyOptions() {

@@ -1,5 +1,9 @@
 import Foundation;
 
+public class CLICommand: CLICommandBase  {
+
+}
+
 enum CLICommandBaseError: Error {
     case initWithEmptyOptions
     case duplicatedOptions

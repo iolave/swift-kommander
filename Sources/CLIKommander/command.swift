@@ -1,7 +1,15 @@
 import Foundation;
 
 public class CLICommand: CLICommandBase  {
+    var subCommands: [CLICommand]? = nil;
 
+    override init(name: String, action: @escaping CommandAction) {
+        super.init(name: name, action: action);
+    }
+
+    override init(name: String, action: @escaping CommandAction, options: [CLIOption]) throws {
+        try super.init(name: name, action: action, options: options);
+    }
 }
 
 enum CLICommandBaseError: Error {

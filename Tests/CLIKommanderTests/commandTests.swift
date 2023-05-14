@@ -2,18 +2,14 @@ import XCTest
 @testable import CLIKommander
 
 final class CLICommandTests: XCTestCase {
-    
-}
-
-final class CLICommandBaseTests: XCTestCase {
 
     func test_init_error_throw_initWithEmptyOptions() {
         let name: String = "test-cmd";
         let action: CommandAction = {};
 
         do {
-            _ = try CLICommandBase(name: name, action: action, options: []);
-        } catch CLICommandBaseError.initWithEmptyOptions {
+            _ = try CLICommand(name: name, action: action, options: []);
+        } catch CLICommandError.initWithEmptyOptions {
             return;
         } catch {
             XCTFail("Wrong error thrown");
@@ -34,8 +30,8 @@ final class CLICommandBaseTests: XCTestCase {
         ]
 
         do {
-            _ = try CLICommandBase(name: name, action: action, options: options);
-        } catch CLICommandBaseError.duplicatedOptions {
+            _ = try CLICommand(name: name, action: action, options: options);
+        } catch CLICommandError.duplicatedOptions {
             return;
         } catch {
             XCTFail("Wrong error thrown");
@@ -56,8 +52,8 @@ final class CLICommandBaseTests: XCTestCase {
         ]
 
         do {
-            _ = try CLICommandBase(name: name, action: action, options: options);
-        } catch CLICommandBaseError.duplicatedOptions {
+            _ = try CLICommand(name: name, action: action, options: options);
+        } catch CLICommandError.duplicatedOptions {
             return;
         } catch {
             XCTFail("Wrong error thrown");
@@ -76,19 +72,36 @@ final class CLICommandBaseTests: XCTestCase {
             try! CLIOption(name: "--test-opt-2", shorthand: "-b", requiresValue: true, required: true),
         ]
 
-        XCTAssertNoThrow(try CLICommandBase(name: name, action: action, options: options))
+        XCTAssertNoThrow(try CLICommand(name: name, action: action, options: options))
+    }
+
+    func test_addOption_error_throw_commandOnlyAllowsAddSubCommandMethod() {
+        let name: String = "test-cmd";
+
+        let cmd: CLICommand = CLICommand(name: name);
+        cmd.subCommands = [];
+
+        do {
+            try cmd.addOption(name: "--test-option", shorthand: nil, requiresValue: true, required: true);
+        } catch CLICommandError.commandOnlyAllowsAddSubCommandMethod { return }
+        catch {
+            XCTFail("Wrong error thrown");
+            return;
+        }
+            
+        XCTFail("No error thown");
     }
 
     func test_addOption_error_throw_duplicatedOptions_name() {
         let name: String = "test-cmd";
         let action: CommandAction = {};
 
-        let cmd: CLICommandBase = CLICommandBase(name: name, action: action);
+        let cmd: CLICommand = CLICommand(name: name, action: action);
 
         do {
             try cmd.addOption(name: "--test-option", shorthand: nil, requiresValue: true, required: true);
             try cmd.addOption(name: "--test-option", shorthand: nil, requiresValue: true, required: true);
-        } catch CLICommandBaseError.duplicatedOptions { return }
+        } catch CLICommandError.duplicatedOptions { return }
         catch {
             XCTFail("Wrong error thrown");
             return;
@@ -101,12 +114,12 @@ final class CLICommandBaseTests: XCTestCase {
         let name: String = "test-cmd";
         let action: CommandAction = {};
 
-        let cmd: CLICommandBase = CLICommandBase(name: name, action: action);
+        let cmd: CLICommand = CLICommand(name: name, action: action);
 
         do {
             try cmd.addOption(name: "--test-option-a", shorthand: "-t", requiresValue: true, required: true);
             try cmd.addOption(name: "--test-option-b", shorthand: "-t", requiresValue: true, required: true);
-        } catch CLICommandBaseError.duplicatedOptions { return }
+        } catch CLICommandError.duplicatedOptions { return }
         catch {
             XCTFail("Wrong error thrown");
             return;
@@ -119,7 +132,7 @@ final class CLICommandBaseTests: XCTestCase {
         let name: String = "test-cmd";
         let action: CommandAction = {};
 
-        let cmd: CLICommandBase = CLICommandBase(name: name, action: action);
+        let cmd: CLICommand = CLICommand(name: name, action: action);
 
         do {
             try cmd.addOption(name: "test-option", shorthand: nil, requiresValue: true, required: true);
@@ -136,7 +149,7 @@ final class CLICommandBaseTests: XCTestCase {
         let name: String = "test-cmd";
         let action: CommandAction = {};
 
-        let cmd: CLICommandBase = CLICommandBase(name: name, action: action);
+        let cmd: CLICommand = CLICommand(name: name, action: action);
 
         do {
             try cmd.addOption(name: "--test-option", shorthand: "t", requiresValue: true, required: true);
@@ -153,7 +166,7 @@ final class CLICommandBaseTests: XCTestCase {
         let name: String = "test-cmd";
         let action: CommandAction = {};
 
-        let cmd: CLICommandBase = CLICommandBase(name: name, action: action);
+        let cmd: CLICommand = CLICommand(name: name, action: action);
         XCTAssertNoThrow(try cmd.addOption(name: "--test-option", shorthand: "-t", requiresValue: false, required: false));
     }
 }

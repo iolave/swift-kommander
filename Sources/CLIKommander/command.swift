@@ -1,39 +1,33 @@
 import Foundation;
 
-public class CLICommand: CLICommandBase  {
-    var subCommands: [CLICommand]? = nil;
-
-    override init(name: String, action: @escaping CommandAction) {
-        super.init(name: name, action: action);
-    }
-
-    override init(name: String, action: @escaping CommandAction, options: [CLIOption]) throws {
-        try super.init(name: name, action: action, options: options);
-    }
-}
-
-enum CLICommandBaseError: Error {
+enum CLICommandError: Error {
     case initWithEmptyOptions
     case duplicatedOptions
+    case commandOnlyAllowsAddSubCommandMethod
 }
 
-public class CLICommandBase {
-    let name: String;
+public class CLICommand {
+    private var allowSubCommands: Bool;
+
+    var name: String;
     var action: CLIAction? = nil;
     var options: [CLIOption]? = nil;
+    var subCommands: [CLICommand]? = nil;
 
     init(name: String, action: @escaping CommandAction) {
         self.name = name;
         self.action = action;
+        self.allowSubCommands = false;
     }
 
     init(name: String, action: @escaping CommandAction, options: [CLIOption]) throws {
         self.name = name;
         self.action = action;
+        self.allowSubCommands = false;
 
         if (options.count == 0) {
             print("options initializer parameter can not be empty, either remove options parameter or add options");
-            throw CLICommandBaseError.initWithEmptyOptions;
+            throw CLICommandError.initWithEmptyOptions;
         }
 
         // As options lenght is not 0 we're able to check 
@@ -41,21 +35,35 @@ public class CLICommandBase {
         // or the same shorthand
         if (optionDuplicates(options: options)) {
             print("There is an option within the options initializer parameter that have a duplicated 'name' or 'shorthand' property");
-            throw CLICommandBaseError.duplicatedOptions;
+            throw CLICommandError.duplicatedOptions;
         }
 
         self.options = options;
     }
 
+    /** This initializer only creates a command with a name and sets
+        `subCommands`, `options` and `action` as nil. This will only
+        allow the user to use the addSubCommand method.
+    */
+    init(name: String) {
+        self.name = name;
+        self.allowSubCommands = true;
+    }
+
     /**
-    Adds an option to a CLICommandBase instance.
+    Adds an option to a CLICommand instance.
     - Parameter name: Name of the given option (should begin with a `--` prefix)
     - Parameter shorthand: Shorthand for the option name (optional, should begin with a `-` prefix)
     - Parameter requiresValue: Specify if the option requires a value (i.e. `--path /root` or `--path=/root`)
     - Parameter required: Specify if the option is required or optional.
-    - Throws `CLICommandBaseError.duplicatedOptions`
+    - Throws `CLICommandError.duplicatedOptions`
     */
     public func addOption(name: String, shorthand: String?, requiresValue: Bool, required: Bool) throws -> Void {
+        if (self.allowSubCommands == true && self.subCommands != nil) {
+            print("CLICommand ERROR: command '", self.name, "' does not allow addOption calls cuz it's purposed to store subCommands only");
+            throw CLICommandError.commandOnlyAllowsAddSubCommandMethod;
+        }
+
         var option: CLIOption;
 
         if (self.options == nil) { self.options = [] }
@@ -70,8 +78,11 @@ public class CLICommandBase {
 
         if (optionDuplicates(options: self.options!)) {
             print("There is an option within the options initializer parameter that have a duplicated 'name' or 'shorthand' property");
-            throw CLICommandBaseError.duplicatedOptions;
+            throw CLICommandError.duplicatedOptions;
         }
+
+        self.allowSubCommands = false;
+
         return;
     }
     

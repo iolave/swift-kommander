@@ -83,7 +83,7 @@ final class CLICommandTests: XCTestCase {
 
         do {
             try cmd.addOption(name: "--test-option", shorthand: nil, requiresValue: true, required: true);
-        } catch CLICommandError.commandOnlyAllowsAddSubCommandMethod { return }
+        } catch CLICommandError.commandOnlyAllowsAddCommandMethod { return }
         catch {
             XCTFail("Wrong error thrown");
             return;
@@ -168,5 +168,48 @@ final class CLICommandTests: XCTestCase {
 
         let cmd: CLICommand = CLICommand(name: name, action: action);
         XCTAssertNoThrow(try cmd.addOption(name: "--test-option", shorthand: "-t", requiresValue: false, required: false));
+    }
+
+    func test_addCommand_success() {
+        let name: String = "test-cmd";
+
+        let cmd: CLICommand = CLICommand(name: name);
+        let subCmd: CLICommand = CLICommand(name: name);
+        XCTAssertNoThrow(try cmd.addCommand(command: subCmd));
+    }
+
+    func test_addCommand_error_throw_duplicatedCommand() {
+        let name: String = "test-cmd";
+
+        let cmd: CLICommand = CLICommand(name: name);
+        let subCmd: CLICommand = CLICommand(name: name);
+
+        do {
+            try cmd.addCommand(command: subCmd);
+            try cmd.addCommand(command: subCmd);
+        } catch CLICommandError.duplicatedCommand { return }
+        catch {
+            XCTFail("Wrong error thrown");
+            return;
+        }
+
+        XCTFail("No error thown");
+    }
+
+    func test_addCommand_error_throw_commandDoesNotAllowsAddCommandMethod() {
+        let name: String = "test-cmd";
+
+        let cmd: CLICommand = CLICommand(name: name, action: {});
+        let subCmd: CLICommand = CLICommand(name: name);
+
+        do {
+            try cmd.addCommand(command: subCmd);
+        } catch CLICommandError.commandDoesNotAllowsAddCommandMethod { return }
+        catch {
+            XCTFail("Wrong error thrown");
+            return;
+        }
+
+        XCTFail("No error thown");
     }
 }

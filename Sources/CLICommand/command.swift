@@ -3,7 +3,9 @@ import Foundation;
 enum CLICommandError: Error {
     case initWithEmptyOptions
     case duplicatedOptions
-    case commandOnlyAllowsAddSubCommandMethod
+    case duplicatedCommand
+    case commandOnlyAllowsAddCommandMethod
+    case commandDoesNotAllowsAddCommandMethod
 }
 
 public class CLICommand {
@@ -43,7 +45,7 @@ public class CLICommand {
 
     /** This initializer only creates a command with a name and sets
         `subCommands`, `options` and `action` as nil. This will only
-        allow the user to use the addSubCommand method.
+        allow the user to use the addCommand method.
     */
     init(name: String) {
         self.name = name;
@@ -51,7 +53,7 @@ public class CLICommand {
     }
 
     /**
-    Adds an option to a CLICommand instance.
+    Adds an option to the CLICommand instance.
     - Parameter name: Name of the given option (should begin with a `--` prefix)
     - Parameter shorthand: Shorthand for the option name (optional, should begin with a `-` prefix)
     - Parameter requiresValue: Specify if the option requires a value (i.e. `--path /root` or `--path=/root`)
@@ -61,7 +63,7 @@ public class CLICommand {
     public func addOption(name: String, shorthand: String?, requiresValue: Bool, required: Bool) throws -> Void {
         if (self.allowSubCommands == true && self.subCommands != nil) {
             print("CLICommand ERROR: command '", self.name, "' does not allow addOption calls cuz it's purposed to store subCommands only");
-            throw CLICommandError.commandOnlyAllowsAddSubCommandMethod;
+            throw CLICommandError.commandOnlyAllowsAddCommandMethod;
         }
 
         var option: CLIOption;
@@ -85,6 +87,31 @@ public class CLICommand {
 
         return;
     }
+
+    public func addCommand(command: CLICommand) throws {
+        if (self.allowSubCommands == false) {
+            print("CLICommand ERROR: command '", self.name, "' does not allow addCommand calls cuz it already have either 'options' or 'action' defined");
+            throw CLICommandError.commandDoesNotAllowsAddCommandMethod;
+        }
+
+        var tmpSubCommands: [CLICommand]? = nil;
+
+        if (self.subCommands == nil) {
+            tmpSubCommands = [];
+        } else {
+            tmpSubCommands = subCommands;
+        }
+
+        tmpSubCommands?.append(command);
+
+        if (commandDuplicates(commands: tmpSubCommands!)) {
+            print("CLICommand ERROR: command '", self.name, "' already exists");
+            throw CLICommandError.duplicatedCommand;
+        }
+
+        self.subCommands = tmpSubCommands;
+        return;
+    }
     
 }
 
@@ -97,17 +124,16 @@ public typealias CLIAction = () -> Void;
  * - Returns:
  * `true` when a duplicate is found and `false` otherwise.
  */
-func commandDuplicates(options: [CLIOption]) -> Bool {
-    var mutableOptions: [CLIOption] = options;
+public func commandDuplicates(commands: [CLICommand]) -> Bool {
+    var mutableCommands: [CLICommand] = commands;
 
-    while(mutableOptions.count > 0) {
-        let opt: CLIOption? = mutableOptions.popLast();
+    while(mutableCommands.count > 0) {
+        let cmd: CLICommand? = mutableCommands.popLast();
 
-        if (opt == nil) { return true }
+        if (cmd == nil) { return true }
 
-        for optToCheck: CLIOption in mutableOptions {
-            if (optToCheck.name == opt!.name) { return true }
-            if (optToCheck.shorthand == opt!.shorthand) { return true }
+        for cmdToCheck: CLICommand in mutableCommands {
+            if (cmdToCheck.name == cmd!.name) { return true }
         }
     }
 

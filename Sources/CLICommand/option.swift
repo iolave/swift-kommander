@@ -46,7 +46,7 @@ enum CLIOptionError: Error {
  * - Returns:
  * `true` when a duplicate is found and `false` otherwise.
  */
-public func optionDuplicates(options: [CLIOption]) -> Bool {
+func optionDuplicates(options: [CLIOption]) -> Bool {
     var mutableOptions: [CLIOption] = options;
 
     while(mutableOptions.count > 0) {

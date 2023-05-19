@@ -14,13 +14,13 @@ public class CLICommand {
     var options: [CLIOption]? = nil;
     var subCommands: [CLICommand]? = nil;
 
-    init(name: String, action: @escaping CommandAction) {
+    init(name: String, action: @escaping CLIAction) {
         self.name = name;
         self.action = action;
         self.allowSubCommands = false;
     }
 
-    init(name: String, action: @escaping CommandAction, options: [CLIOption]) throws {
+    init(name: String, action: @escaping CLIAction, options: [CLIOption]) throws {
         self.name = name;
         self.action = action;
         self.allowSubCommands = false;
@@ -89,4 +89,28 @@ public class CLICommand {
 }
 
 public typealias CLIAction = () -> Void;
+
+/**
+ * Check if a CLIOptions array have a duplicated
+ * `name` and/or `shorthand` property.
+ * - Parameters:
+ * - Returns:
+ * `true` when a duplicate is found and `false` otherwise.
+ */
+func commandDuplicates(options: [CLIOption]) -> Bool {
+    var mutableOptions: [CLIOption] = options;
+
+    while(mutableOptions.count > 0) {
+        let opt: CLIOption? = mutableOptions.popLast();
+
+        if (opt == nil) { return true }
+
+        for optToCheck: CLIOption in mutableOptions {
+            if (optToCheck.name == opt!.name) { return true }
+            if (optToCheck.shorthand == opt!.shorthand) { return true }
+        }
+    }
+
+    return false;
+}
 

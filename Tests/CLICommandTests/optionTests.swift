@@ -1,5 +1,5 @@
 import XCTest
-@testable import CLIKommander
+@testable import CLICommand
 
 final class CLIOptionTests: XCTestCase {
     func test_init_error_throw_invalidNamePrefix() {

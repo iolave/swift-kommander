@@ -13,12 +13,20 @@ let package = Package(
     dependencies: [ ],
     targets: [
         .target(
-            name: "CLIKommander",
+            name: "CLICommand",
             dependencies: []
         ),
         .testTarget(
-            name: "CLIKommanderTests",
-            dependencies: ["CLIKommander"]
+            name: "CLICommandTests",
+            dependencies: ["CLICommand"]
         ),
+        .target(
+            name: "CLIKommander",
+            dependencies: ["CLICommand"]
+        ),
+        // .testTarget(
+        //     name: "CLIKommanderTests",
+        //     dependencies: ["CLIKommander"]
+        // ),
     ]
 )

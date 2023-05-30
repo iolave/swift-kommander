@@ -2,10 +2,9 @@ import XCTest
 @testable import CLICommand
 
 final class CLICommandTests: XCTestCase {
-
     func test_init_error_throw_initWithEmptyOptions() {
         let name: String = "test-cmd";
-        let action: CLIAction = {};
+        let action: CLIAction = CLIAction({ args in });
 
         do {
             _ = try CLICommand(name: name, action: action, options: []);
@@ -21,7 +20,7 @@ final class CLICommandTests: XCTestCase {
 
     func test_init_error_throw_duplicatedOptions_name() {
         let name: String = "test-cmd";
-        let action: CLIAction = {};
+        let action: CLIAction = CLIAction({ args in });
 
         let optName: String = "--test-opt";
         let options: [CLIOption] = [
@@ -43,7 +42,7 @@ final class CLICommandTests: XCTestCase {
 
     func test_init_error_throw_duplicatedOptions_shorthand() {
         let name: String = "test-cmd";
-        let action: CLIAction = {};
+        let action: CLIAction = CLIAction({ args in });
 
         let shorthand: String = "--test-opt";
         let options: [CLIOption] = [
@@ -65,7 +64,7 @@ final class CLICommandTests: XCTestCase {
 
     func test_init_success() {
         let name: String = "test-cmd";
-        let action: CLIAction = {};
+        let action: CLIAction = CLIAction({ args in });
 
         let options: [CLIOption] = [
             try! CLIOption(name: "--test-opt-1", shorthand: "-a", requiresValue: true, required: true),
@@ -94,7 +93,7 @@ final class CLICommandTests: XCTestCase {
 
     func test_addOption_error_throw_duplicatedOptions_name() {
         let name: String = "test-cmd";
-        let action: CLIAction = {};
+        let action: CLIAction = CLIAction({ args in });
 
         let cmd: CLICommand = CLICommand(name: name, action: action);
 
@@ -112,7 +111,7 @@ final class CLICommandTests: XCTestCase {
     
     func test_addOption_error_throw_duplicatedOptions_shorthand() {
         let name: String = "test-cmd";
-        let action: CLIAction = {};
+        let action: CLIAction = CLIAction({ args in });
 
         let cmd: CLICommand = CLICommand(name: name, action: action);
 
@@ -130,7 +129,7 @@ final class CLICommandTests: XCTestCase {
 
     func test_addOption_error_throw_invalidNamePrefix() {
         let name: String = "test-cmd";
-        let action: CLIAction = {};
+        let action: CLIAction = CLIAction({ args in });
 
         let cmd: CLICommand = CLICommand(name: name, action: action);
 
@@ -147,7 +146,7 @@ final class CLICommandTests: XCTestCase {
 
     func test_addOption_error_throw_invalidShorthandPrefix() {
         let name: String = "test-cmd";
-        let action: CLIAction = {};
+        let action: CLIAction = CLIAction({ args in });
 
         let cmd: CLICommand = CLICommand(name: name, action: action);
 
@@ -164,7 +163,7 @@ final class CLICommandTests: XCTestCase {
 
     func test_addOption_success() {
         let name: String = "test-cmd";
-        let action: CLIAction = {};
+        let action: CLIAction = CLIAction({ args in });
 
         let cmd: CLICommand = CLICommand(name: name, action: action);
         XCTAssertNoThrow(try cmd.addOption(name: "--test-option", shorthand: "-t", requiresValue: false, required: false));
@@ -199,7 +198,8 @@ final class CLICommandTests: XCTestCase {
     func test_addCommand_error_throw_commandDoesNotAllowsAddCommandMethod() {
         let name: String = "test-cmd";
 
-        let cmd: CLICommand = CLICommand(name: name, action: {});
+        let action: CLIAction = CLIAction({ args in });
+        let cmd: CLICommand = CLICommand(name: name, action: action);
         let subCmd: CLICommand = CLICommand(name: name);
 
         do {

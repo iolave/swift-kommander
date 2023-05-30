@@ -130,9 +130,9 @@ public struct CLIAction {
 public typealias CLIMethod = (_ args: Any...) -> Void;
 
 /**
- * Check if a CLIOptions array have a duplicated
- * `name` and/or `shorthand` property.
- * - Parameters:
+ * Check if a CLICommand array have a duplicated
+ * `name` property.
+ * - Parameter commands: Array of `CLICommand`
  * - Returns:
  * `true` when a duplicate is found and `false` otherwise.
  */

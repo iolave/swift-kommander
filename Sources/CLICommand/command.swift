@@ -10,11 +10,13 @@ enum CLICommandError: Error {
 
 public class CLICommand {
     private var allowSubCommands: Bool;
+    private var action: CLIAction? = nil;
+    private var actionOptionNamesOrder: [String]? = nil;
 
     var name: String;
-    var action: CLIAction? = nil;
     var options: [CLIOption]? = nil;
     var subCommands: [CLICommand]? = nil;
+    
 
     init(name: String, action: @escaping CLIAction) {
         self.name = name;
@@ -54,9 +56,9 @@ public class CLICommand {
 
     /**
     Adds an option to the CLICommand instance.
-    - Parameter name: Name of the given option (should begin with a `--` prefix)
-    - Parameter shorthand: Shorthand for the option name (optional, should begin with a `-` prefix)
-    - Parameter requiresValue: Specify if the option requires a value (i.e. `--path /root` or `--path=/root`)
+    - Parameter name: Name of the given option (should begin with a `--` prefix).
+    - Parameter shorthand: Shorthand for the option name (optional, should begin with a `-` prefix).
+    - Parameter requiresValue: Specify if the option requires a value (i.e. `--path /root` or `--path=/root`).
     - Parameter required: Specify if the option is required or optional.
     - Throws `CLICommandError.duplicatedOptions`
     */
@@ -113,8 +115,18 @@ public class CLICommand {
         return;
     }
     
-    public func addAction(_ method: @escaping CLIAction, _ optionsOrder: [String]) throws {
-
+    /**
+        Sets a function that can be invoked through the `CLICommand` instance.
+        - Parameter method: Function to be setted.
+        - Parameter optionsOrder: `CLICommand.options[].name` array that represents 
+        the order of the options values that will be passed to method when executed.
+        - Parameter requiresValue: Specify if the option requires a value (i.e. `--path /root` or `--path=/root`)
+        - Parameter required: Specify if the option is required or optional.
+    */
+    public func setAction(_ method: @escaping CLIAction, _ optionsOrder: [String]) {
+        self.action = method;
+        self.actionOptionNamesOrder = optionsOrder;
+        self.allowSubCommands = false;
     }
 }
 

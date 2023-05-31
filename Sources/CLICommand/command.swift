@@ -16,13 +16,13 @@ public class CLICommand {
     var options: [CLIOption]? = nil;
     var subCommands: [CLICommand]? = nil;
 
-    init(name: String, action: CLIAction) {
+    init(name: String, action: @escaping CLIAction) {
         self.name = name;
         self.action = action;
         self.allowSubCommands = false;
     }
 
-    init(name: String, action: CLIAction, options: [CLIOption]) throws {
+    init(name: String, action: @escaping CLIAction, options: [CLIOption]) throws {
         self.name = name;
         self.action = action;
         self.allowSubCommands = false;
@@ -113,21 +113,12 @@ public class CLICommand {
         return;
     }
     
-}
+    public func addAction(_ method: @escaping CLIAction, _ optionsOrder: [String]) throws {
 
-public struct CLIAction {
-    private let method: CLIMethod;
-
-    init(_ method: @escaping CLIMethod) {
-        self.method = method;
-    }
-
-    public func execute () {
-        self.method();
     }
 }
 
-public typealias CLIMethod = (_ args: Any...) -> Void;
+public typealias CLIAction = (_ args: Any...) -> Void;
 
 /**
  * Check if a CLICommand array have a duplicated

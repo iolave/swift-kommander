@@ -90,7 +90,7 @@ public class CLICommand {
         return;
     }
 
-    public func addCommand(command: CLICommand) throws {
+    public func addCommand(command: CLICommand) throws -> Void {
         if (self.allowSubCommands == false) {
             print("CLICommand ERROR: command '", self.name, "' does not allow addCommand calls cuz it already have either 'options' or 'action' defined");
             throw CLICommandError.commandDoesNotAllowsAddCommandMethod;
@@ -121,7 +121,7 @@ public class CLICommand {
         - Parameter optionsOrder: `CLICommand.options[].name` array that represents 
         the order of the options values that will be passed to method when executed.
     */
-    public func setAction(_ method: @escaping CLIAction, _ optionsOrder: [String]) {
+    public func setAction(_ method: @escaping CLIAction, _ optionsOrder: [String]) -> Void {
         self.action = method;
         self.actionOptionNamesOrder = optionsOrder;
         self.allowSubCommands = false;
@@ -131,7 +131,7 @@ public class CLICommand {
         Sets a function that can be invoked through the `CLICommand` instance.
         - Parameter method: Function to be setted.
     */
-    public func setAction(_ method: @escaping CLIAction) {
+    public func setAction(_ method: @escaping CLIAction) -> Void {
         self.action = method;
         self.allowSubCommands = false;
     }

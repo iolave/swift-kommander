@@ -135,6 +135,17 @@ public class CLICommand {
         self.action = method;
         self.allowSubCommands = false;
     }
+
+    /**
+        Sets the function arguments order 
+        - Parameter options: `CLICommand.options[].name` 
+        array that represents the order of the options values
+        that will be passed to method when executed.
+    */
+    public func setActionOptionsOrder(_ order: [String]) -> Void {
+        self.actionOptionNamesOrder = order;
+        self.allowSubCommands = false;
+    }
 }
 
 public typealias CLIAction = (_ args: Any...) -> Void;

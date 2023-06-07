@@ -9,7 +9,7 @@ enum CLICommandError: Error {
 }
 
 public class CLICommand {
-    private var allowSubCommands: Bool;
+    private var allowSubCommands: Bool = true;
     private var action: CLIAction? = nil;
     private var actionOptionNamesOrder: [String]? = nil;
 
@@ -51,7 +51,6 @@ public class CLICommand {
     */
     public init(name: String) {
         self.name = name;
-        self.allowSubCommands = true;
     }
 
     /**

@@ -7,6 +7,10 @@ public final class CLIKommander: CLICommand {
 		super.init("default")
 	}
 	
+	/**
+        Sets the CLIKommander app name 
+        - Parameter name: new app name.
+    */
 	public func setAppName (_ name: String) -> Void {
 		self.name = name;
 	}

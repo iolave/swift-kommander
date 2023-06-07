@@ -13,18 +13,19 @@ public class CLICommand {
     private var action: CLIAction? = nil;
     private var actionOptionNamesOrder: [String]? = nil;
 
-    var name: String;
-    var options: [CLIOption]? = nil;
-    var subCommands: [CLICommand]? = nil;
+    internal var name: String;
+    internal var options: [CLIOption]? = nil;
+    internal var subCommands: [CLICommand]? = nil;
     
-
-    init(name: String, action: @escaping CLIAction) {
+    @available(*, deprecated)
+    internal init(name: String, action: @escaping CLIAction) {
         self.name = name;
         self.action = action;
         self.allowSubCommands = false;
     }
 
-    init(name: String, action: @escaping CLIAction, options: [CLIOption]) throws {
+    @available(*, deprecated)
+    internal init(name: String, action: @escaping CLIAction, options: [CLIOption]) throws {
         self.name = name;
         self.action = action;
         self.allowSubCommands = false;
@@ -49,7 +50,7 @@ public class CLICommand {
         `subCommands`, `options` and `action` as nil. This will only
         allow the user to use the addCommand method.
     */
-    public init(name: String) {
+    internal init(name: String) {
         self.name = name;
     }
 

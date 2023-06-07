@@ -16,7 +16,7 @@ final class CLIKommanderTests: XCTestCase {
 			"--o3",
 			"-x",
 			"-y", "vx"
-		]);
+		]);        
 
 		for e: CommandLineArg in res { print("type:", e.type, "name:", e.name, "\tvalue:", e.value as Any) }
 

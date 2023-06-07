@@ -1,6 +1,6 @@
 import Foundation
 
-internal func cliArgsToKeyValue(_ args: [String]) -> Void {
+internal func cliArgsToKeyValue(_ args: [String]) -> [CommandLineArg] {
 	var allowMoreCommands: Bool = true;
 	var mutArgs: [String] = args;
 	var parsedArgs: [CommandLineArg] = [];
@@ -46,10 +46,10 @@ internal func cliArgsToKeyValue(_ args: [String]) -> Void {
 		}
 	}
 
-	for e in parsedArgs { print(e) }
+	return parsedArgs;
 }
 
-private struct CommandLineArg {
+internal struct CommandLineArg {
 	let type: String;
 	let name: String;
 	let value: String?;

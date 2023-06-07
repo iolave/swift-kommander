@@ -50,7 +50,7 @@ public class CLICommand {
         `subCommands`, `options` and `action` as nil. This will only
         allow the user to use the addCommand method.
     */
-    internal init(name: String) {
+    public init(name: String) {
         self.name = name;
     }
 
@@ -120,12 +120,19 @@ public class CLICommand {
         - Parameter method: Function to be setted.
         - Parameter optionsOrder: `CLICommand.options[].name` array that represents 
         the order of the options values that will be passed to method when executed.
-        - Parameter requiresValue: Specify if the option requires a value (i.e. `--path /root` or `--path=/root`)
-        - Parameter required: Specify if the option is required or optional.
     */
     public func setAction(_ method: @escaping CLIAction, _ optionsOrder: [String]) {
         self.action = method;
         self.actionOptionNamesOrder = optionsOrder;
+        self.allowSubCommands = false;
+    }
+
+    /**
+        Sets a function that can be invoked through the `CLICommand` instance.
+        - Parameter method: Function to be setted.
+    */
+    public func setAction(_ method: @escaping CLIAction) {
+        self.action = method;
         self.allowSubCommands = false;
     }
 }

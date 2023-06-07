@@ -49,7 +49,7 @@ public class CLICommand {
         `subCommands`, `options` and `action` as nil. This will only
         allow the user to use the addCommand method.
     */
-    init(name: String) {
+    public init(name: String) {
         self.name = name;
         self.allowSubCommands = true;
     }

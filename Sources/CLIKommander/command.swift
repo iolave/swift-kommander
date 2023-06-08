@@ -9,22 +9,23 @@ enum CLICommandError: Error {
 }
 
 public class CLICommand {
-    private var allowSubCommands: Bool;
+    private var allowSubCommands: Bool = true;
     private var action: CLIAction? = nil;
     private var actionOptionNamesOrder: [String]? = nil;
 
-    var name: String;
-    var options: [CLIOption]? = nil;
-    var subCommands: [CLICommand]? = nil;
+    internal var name: String;
+    internal var options: [CLIOption]? = nil;
+    internal var subCommands: [CLICommand]? = nil;
     
-
-    init(name: String, action: @escaping CLIAction) {
+    @available(*, deprecated)
+    internal init(name: String, action: @escaping CLIAction) {
         self.name = name;
         self.action = action;
         self.allowSubCommands = false;
     }
 
-    init(name: String, action: @escaping CLIAction, options: [CLIOption]) throws {
+    @available(*, deprecated)
+    internal init(name: String, action: @escaping CLIAction, options: [CLIOption]) throws {
         self.name = name;
         self.action = action;
         self.allowSubCommands = false;
@@ -49,9 +50,8 @@ public class CLICommand {
         `subCommands`, `options` and `action` as nil. This will only
         allow the user to use the addCommand method.
     */
-    public init(name: String) {
+    public init(_ name: String) {
         self.name = name;
-        self.allowSubCommands = true;
     }
 
     /**
@@ -90,7 +90,7 @@ public class CLICommand {
         return;
     }
 
-    public func addCommand(command: CLICommand) throws {
+    public func addCommand(command: CLICommand) throws -> Void {
         if (self.allowSubCommands == false) {
             print("CLICommand ERROR: command '", self.name, "' does not allow addCommand calls cuz it already have either 'options' or 'action' defined");
             throw CLICommandError.commandDoesNotAllowsAddCommandMethod;
@@ -120,12 +120,30 @@ public class CLICommand {
         - Parameter method: Function to be setted.
         - Parameter optionsOrder: `CLICommand.options[].name` array that represents 
         the order of the options values that will be passed to method when executed.
-        - Parameter requiresValue: Specify if the option requires a value (i.e. `--path /root` or `--path=/root`)
-        - Parameter required: Specify if the option is required or optional.
     */
-    public func setAction(_ method: @escaping CLIAction, _ optionsOrder: [String]) {
+    public func setAction(_ method: @escaping CLIAction, _ optionsOrder: [String]) -> Void {
         self.action = method;
         self.actionOptionNamesOrder = optionsOrder;
+        self.allowSubCommands = false;
+    }
+
+    /**
+        Sets a function that can be invoked through the `CLICommand` instance.
+        - Parameter method: Function to be setted.
+    */
+    public func setAction(_ method: @escaping CLIAction) -> Void {
+        self.action = method;
+        self.allowSubCommands = false;
+    }
+
+    /**
+        Sets the function arguments order 
+        - Parameter options: `CLICommand.options[].name` 
+        array that represents the order of the options values
+        that will be passed to method when executed.
+    */
+    public func setActionOptionsOrder(_ order: [String]) -> Void {
+        self.actionOptionNamesOrder = order;
         self.allowSubCommands = false;
     }
 }

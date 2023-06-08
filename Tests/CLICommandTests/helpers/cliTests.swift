@@ -3,7 +3,7 @@ import XCTest
 
 final class CLIKommanderTests: XCTestCase {
     func test_print() {
-		let res: [CommandLineArg] = cliArgsToKeyValue([
+		let res: [CLIArgument] = mapCommandLineArgs([
 			"c1",
 			"c2",
 			"--o1", "v1",

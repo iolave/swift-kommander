@@ -3,7 +3,7 @@ import XCTest
 
 final class HelpersTests: XCTestCase {
     func test_mapCommandLineArgs_success() {
-		let res: [CLIArgument] = mapCommandLineArgs([
+		let res: [CLIArgument] = try! mapCommandLineArgs([
 			"c1",
 			"c2",
 			"--o1", "v1",
@@ -32,5 +32,17 @@ final class HelpersTests: XCTestCase {
 		XCTAssert(res[9].type  == "opt"); XCTAssert(res[9].name  == "--o3"); XCTAssert(res[9].value  == nil);
 		XCTAssert(res[10].type == "opt"); XCTAssert(res[10].name == "-x");   XCTAssert(res[10].value == nil);
 		XCTAssert(res[11].type == "opt"); XCTAssert(res[11].name == "-y");   XCTAssert(res[11].value == "vx");
-	}   
+	}
+
+    func test_mapCommandLineArgs_error_doesNotAllowMoreCommands() {
+		do {
+			let args: [String] = ["c1", "c2", "-c1", "c3"];
+            _ = try mapCommandLineArgs(args);
+        } catch MapCommandLineArgsError.AllowCommandsAfterOptions(false) {
+            return;
+        } catch {
+            XCTFail("Wrong error thrown");
+            return;
+        }
+	}
 }

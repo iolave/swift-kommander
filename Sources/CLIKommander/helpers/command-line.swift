@@ -1,13 +1,18 @@
 import Foundation
 
+enum MapCommandLineArgsError: Error {
+	case AllowCommandsAfterOptions(_ value: Bool)
+}
+
 /** Reads an array of strings containing (sub)commands,
 options (i.e. `--option`), option's shorthands (i.e. `-o`)
 and it's corresponding values to map them in a readable way.
 - Returns: An array of `CLIArgument` values, where `CLIArgument`
 stores a type (`"cmd" || "opt"`), name and it's value when
 `CLIArgument.type == "opt"`.
+- Throws: An error of type `MapCommandLineArgsError`
 */
-internal func mapCommandLineArgs(_ args: [String]) -> [CLIArgument] {
+internal func mapCommandLineArgs(_ args: [String]) throws -> [CLIArgument] {
 	/** Mutable version of args parameter */
 	var mutArgs: [String] = args;
 	/** Variable to store this function return value */
@@ -29,8 +34,9 @@ internal func mapCommandLineArgs(_ args: [String]) -> [CLIArgument] {
 		prefix we can append a command kv pair only and only
 		if we're accepting more subcommmands */
 		if (!e.starts(with: "-")) {
-			// TODO: add a throw
-			if (!allowMoreCommands) { exit(1) }
+			if (!allowMoreCommands) { 
+				throw MapCommandLineArgsError.AllowCommandsAfterOptions(allowMoreCommands)
+			}
 			parsedArgs.append(CLIArgument("cmd", e));
 			continue;
 		}

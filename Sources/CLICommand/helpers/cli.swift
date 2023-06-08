@@ -10,6 +10,7 @@ internal func cliArgsToKeyValue(_ args: [String]) -> [CommandLineArg] {
 
 		// si encuentro una opcion y luego un comando
 		// entonces debo salir
+		
 		if (!e.starts(with: "-")) {
 			if (!allowMoreCommands) { exit(1) }
 			let newArg: CommandLineArg = CommandLineArg("cmd", e);

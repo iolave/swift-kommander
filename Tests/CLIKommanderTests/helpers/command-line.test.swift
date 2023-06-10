@@ -16,14 +16,11 @@ final class HelpersTests: XCTestCase {
 			"--o3",
 			"-x",
 			"-y", "vx",
-			"-z", "false"
+			"-z", "false",
+			"-w", "1",
 		]);
 
-		// for e: CLIArgument in res {
-		// 	print (e.value);
-		// }
-        
-		XCTAssert(res.count == 13);
+		XCTAssert(res.count == 14);
 		
 		XCTAssert(res[0].type  == "cmd"); XCTAssert(res[0].name  == "c1");   XCTAssert(res[0].value  == nil);
 		XCTAssert(res[1].type  == "cmd"); XCTAssert(res[1].name  == "c2");   XCTAssert(res[1].value  == nil);
@@ -32,12 +29,13 @@ final class HelpersTests: XCTestCase {
 		XCTAssert(res[4].type  == "opt"); XCTAssert(res[4].name  == "--o3"); XCTAssert(res[4].value as! Optional<Bool> == true);
 		XCTAssert(res[5].type  == "opt"); XCTAssert(res[5].name  == "-x");   XCTAssert(res[5].value as! Optional<String> == "vx");
 		XCTAssert(res[6].type  == "opt"); XCTAssert(res[6].name  == "-y");   XCTAssert(res[6].value as! Optional<Bool> == true);
-		XCTAssert(res[7].type  == "opt"); XCTAssert(res[7].name  == "--o1"); XCTAssert(res[7].value as! Optional<String> == "true");
+		XCTAssert(res[7].type  == "opt"); XCTAssert(res[7].name  == "--o1"); XCTAssert(res[7].value as! Optional<Bool> == true);
 		XCTAssert(res[8].type  == "opt"); XCTAssert(res[8].name  == "--o2"); XCTAssert(res[8].value as! Optional<String> == "v2");
 		XCTAssert(res[9].type  == "opt"); XCTAssert(res[9].name  == "--o3"); XCTAssert(res[9].value as! Optional<Bool> == true);
 		XCTAssert(res[10].type == "opt"); XCTAssert(res[10].name == "-x");   XCTAssert(res[10].value as! Optional<Bool> == true);
 		XCTAssert(res[11].type == "opt"); XCTAssert(res[11].name == "-y");   XCTAssert(res[11].value as! Optional<String> == "vx");
-		XCTAssert(res[12].type == "opt"); XCTAssert(res[12].name == "-z");   XCTAssert(res[12].value as! Optional<String> == "false");
+		XCTAssert(res[12].type == "opt"); XCTAssert(res[12].name == "-z");   XCTAssert(res[12].value as! Optional<Bool> == false);
+		XCTAssert(res[13].type == "opt"); XCTAssert(res[13].name == "-w");   XCTAssert(res[13].value as! Optional<Optional> == 1);
 	}
 
     func test_mapCommandLineArgs_error_doesNotAllowMoreCommands() {

@@ -56,13 +56,15 @@ internal func mapCommandLineArgs(_ args: [String]) throws -> [CLIArgument] {
 			// Handles scenario "1"
 			if (e.contains("=")) {
 				let kv: [String] = e.components(separatedBy: "=");
-				parsedArgs.append(CLIArgument("opt", kv[0], kv[1]));
+				let value: Any = detectAndParseArgumentValue(kv[1]);
+				parsedArgs.append(CLIArgument("opt", kv[0], value));
 				continue;
 			}
 			
 			// Handles scenario 2
 			if (!(mutArgs.first?.starts(with: "-") == true)) {
-				parsedArgs.append(CLIArgument("opt", e, mutArgs.removeFirst()));
+				let value: Any = detectAndParseArgumentValue(mutArgs.removeFirst());
+				parsedArgs.append(CLIArgument("opt", e, value));
 				continue;
 			}
 			
@@ -78,7 +80,8 @@ internal func mapCommandLineArgs(_ args: [String]) throws -> [CLIArgument] {
 		*/
 		// Handles scenario 1
 		if (mutArgs.first != nil && !mutArgs.first!.starts(with: "-")) {
-			parsedArgs.append(CLIArgument("opt", e, mutArgs.removeFirst()));
+			let value: Any = detectAndParseArgumentValue(mutArgs.removeFirst());
+			parsedArgs.append(CLIArgument("opt", e, value));
 			continue;
 		}
 
@@ -113,4 +116,24 @@ internal struct CLIArgument {
 				self.value = nil;
 		}
 	}
+}
+
+private func detectAndParseArgumentValue(_ str: String) -> Any {
+	var isNumber: Bool = true;
+
+	for character: Character in str {
+        if !character.isNumber {
+            isNumber = false;
+			break;
+        }
+    }
+
+	if isNumber { 
+		return Int(str) ?? str
+	}
+	if (str == "true" || str == "false") { 
+		return Bool(str) ?? str
+	}
+	print("is string:", str)
+	return str;
 }

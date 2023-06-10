@@ -67,7 +67,7 @@ internal func mapCommandLineArgs(_ args: [String]) throws -> [CLIArgument] {
 			}
 			
 			// Handles scenario 3
-			parsedArgs.append(CLIArgument("opt", e));
+			parsedArgs.append(CLIArgument("opt", e, true));
 			continue;
 		}
 
@@ -83,18 +83,18 @@ internal func mapCommandLineArgs(_ args: [String]) throws -> [CLIArgument] {
 		}
 
 		// Handles scenario 2
-		parsedArgs.append(CLIArgument("opt", e));
+		parsedArgs.append(CLIArgument("opt", e, true));
 		continue;
 	}
 
 	return parsedArgs;
 }
 
-// TODO: add support for int and bool values
+// TODO: specify that only allowed values are int, string and bool
 internal struct CLIArgument {
 	let type: String;
 	let name: String;
-	let value: String?;
+	let value: Any?;
 
 	init(_ type: String, _ name: String) {
 		self.name = name;
@@ -102,9 +102,15 @@ internal struct CLIArgument {
 		self.value = nil;
 	}
 
-	init(_ type: String, _ name: String, _ value: String) {
+	init<T>(_ type: String, _ name: String, _ value: T) {
 		self.name = name;
 		self.type = type;
-		self.value = value;
+		switch value {
+			case is String, is Int, is Bool:
+				self.value = value;
+			default:
+				// TODO: add an error for unsopported types
+				self.value = nil;
+		}
 	}
 }
